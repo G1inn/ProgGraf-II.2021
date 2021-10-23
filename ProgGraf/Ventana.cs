@@ -5,20 +5,16 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using ProgGraf.Common;
 using ProgGraf.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ProgGraf.Model.Objects;
 
 namespace ProgGraf
 {
     public class Ventana : GameWindow
     {
-        Cuadrado cuadrado;
-        Piramide piramide;
+        /*Cuadrado cuadrado;
+        Piramide piramide;*/
+        Casa casa;
 
-        private Matrix4 _model;
         private Matrix4 _view;
         private Matrix4 _projection;
         public Ventana(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
@@ -33,10 +29,11 @@ namespace ProgGraf
 
             GL.Enable(EnableCap.DepthTest);
 
-            cuadrado = new Cuadrado(new Vector3(0.0f, 0.0f, 0.0f));
-            piramide = new Piramide(new Vector3(0.0f, 0.7f, 0.0f));
+            /*cuadrado = new Cuadrado(new Vector3(0.0f, 0.0f, 0.0f));
+            piramide = new Piramide(new Vector3(0.0f, 0.7f, 0.0f));*/
+            casa = new Casa(new Vector3(0.0f, 0.0f, 0.0f));
 
-            _view = Matrix4.CreateTranslation(0.0f, 0.0f, -3.0f);
+            _view = Matrix4.LookAt(new Vector3(0.0f, 0.0f, -3.0f),new Vector3(0.0f, 0.0f, 0.0f),new Vector3(0.0f, 1.0f, 0.0f));
             _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45f), Size.X / (float)Size.Y, 0.1f, 100.0f);
         }
 
@@ -46,22 +43,20 @@ namespace ProgGraf
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            /*var transform = Matrix4.Identity;
-            //transform = transform * Matrix4.CreateRotationX(MathHelper.DegreesToRadians(45f));
-            //transform = transform * Matrix4.CreateTranslation(0.1f, 0.1f, 0.0f);
-            cuadrado._shader.SetMatrix4("transform", transform);*/
+            var model = Matrix4.Identity;
 
-            _model = Matrix4.Identity;
-
-            cuadrado._shader.SetMatrix4("model", _model);
+            /*cuadrado._shader.SetMatrix4("model", model);
             cuadrado._shader.SetMatrix4("view", _view);
             cuadrado._shader.SetMatrix4("projection", _projection);
             cuadrado.Dibujar();
 
-            piramide._shader.SetMatrix4("model", _model);
+            piramide._shader.SetMatrix4("model", model);
             piramide._shader.SetMatrix4("view", _view);
             piramide._shader.SetMatrix4("projection", _projection);
-            piramide.Dibujar();
+            piramide.Dibujar();*/
+            casa.SetMatrixes(model, _view, _projection);
+            casa.Dibujar();
+
 
             SwapBuffers();
         }

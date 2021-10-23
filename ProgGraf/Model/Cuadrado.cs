@@ -40,7 +40,7 @@ namespace ProgGraf.Model
 
             SetShader();
         }
-        public void Dibujar()
+        public override void Dibujar()
         {
             _shader.Usar();
             _vao.enlazar();

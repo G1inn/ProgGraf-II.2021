@@ -19,10 +19,10 @@ namespace ProgGraf.Model
         public Piramide(Vector3 centro)
         {
             _vertices = new float[]{
-                 0.5f + centro.X, 0.0f + centro.Y,  0.5f + centro.Z, // top right
-                 0.5f + centro.X, 0.0f + centro.Y, -0.5f + centro.Z, // bottom right
-                -0.5f + centro.X, 0.0f + centro.Y,  0.5f + centro.Z, // bottom left
-                -0.5f + centro.X, 0.0f + centro.Y, -0.5f + centro.Z, // top left
+                 0.5f + centro.X, 0.0f + centro.Y,  0.5f + centro.Z,
+                 0.5f + centro.X, 0.0f + centro.Y, -0.5f + centro.Z,
+                -0.5f + centro.X, 0.0f + centro.Y,  0.5f + centro.Z,
+                -0.5f + centro.X, 0.0f + centro.Y, -0.5f + centro.Z,
 
                  0.0f + centro.X, 0.3f + centro.Y,  0.0f + centro.Z,
             };
@@ -43,7 +43,7 @@ namespace ProgGraf.Model
 
             SetShader();
         }
-        public void Dibujar()
+        public override void Dibujar()
         {
             _shader.Usar();
             _vao.enlazar();

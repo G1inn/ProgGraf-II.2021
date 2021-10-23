@@ -14,7 +14,6 @@ var nativeWindowSettings = new NativeWindowSettings()
     Flags = ContextFlags.ForwardCompatible,
 };
 
-// To create a new window, create a class that extends GameWindow, then call Run() on it.
 using (var window = new Ventana(GameWindowSettings.Default, nativeWindowSettings))
 {
     window.Run();

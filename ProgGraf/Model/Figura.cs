@@ -14,6 +14,7 @@ namespace ProgGraf.Model
         public int cantidadDeVertices;
         public int cantidadDeIndices;
         public abstract void SetShader();
+        public abstract void Dibujar();
 
         public VBO _vbo;
         public VAO _vao;
