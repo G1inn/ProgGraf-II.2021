@@ -1,66 +1,40 @@
 ﻿using OpenTK.Mathematics;
+using ProgGraf.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ProgGraf.Model.Objects
 {
-    public class Casa
+    public class Casa : Objeto
     {
-        Vector3 pos;
-        Figura techo;
-        Figura front;
-        Figura back;
-        Figura left;
-        Figura right;
-
-        List<Figura> figuras = new List<Figura>();
+        public Figura paredes;
+        public Figura techo;
 
         public Casa(Vector3 _pos)
         {
+            string paredesDataString = File.ReadAllText("../../../res/paredesData.txt");
+            Data jsonDataP = JsonSerializer.Deserialize<Data>(paredesDataString);
+            float[] vertP = jsonDataP.ParserVertices(_pos);
+            uint[] indP = jsonDataP.Indices;
+
+            string techoDataString = File.ReadAllText("../../../res/techoData.txt");
+            Data jsonDataT = JsonSerializer.Deserialize<Data>(techoDataString);
+            float[] vertT =jsonDataT.ParserVertices(_pos);
+            uint[] indT = jsonDataT.Indices;
+
             pos = _pos;
-            front = new Cuadrado(new Vector3(0.0f + pos.X, 0.0f + pos.Y, 0.5f + pos.Z));
-            back = new Cuadrado(new Vector3( 0.0f + pos.X, 0.0f + pos.Y, -0.5f + pos.Z));
-            left = new Cuadrado(new Vector3(-0.5f + pos.X, 0.0f + pos.Y,  0.0f + pos.Z));
-            right = new Cuadrado(new Vector3(0.5f + pos.X, 0.0f + pos.Y,  0.0f + pos.Z));
-            techo = new Piramide(new Vector3(0.0f + pos.X, 0.7f + pos.Y, 0.0f + pos.Z));
-
-            figuras.Add(front);
-            figuras.Add(back);
-            figuras.Add(left);
-            figuras.Add(right);
-            figuras.Add(techo);
+            paredes = new Figura(new Vector3(pos.X, pos.Y, pos.Z),
+                "../../../Shaders/shader.vert", "../../../Shaders/shader.frag", vertP, indP);
+            techo = new Figura(new Vector3(pos.X, pos.Y, pos.Z),
+                "../../../Shaders/shader.vert", "../../../Shaders/shaderP.frag", vertT, indT);
+            figuras.Add("paredes", paredes);
+            figuras.Add("techo", techo);
         }
 
-        public void SetMatrixes(Matrix4 model, Matrix4 _view, Matrix4 _projection )
-        {
-            foreach (var figura in figuras)
-            {
-                if (figura == left || figura == right)
-                {
-                    model = Matrix4.CreateRotationY(MathHelper.DegreesToRadians(90f));
-                    figura._shader.SetMatrix4("model", model);
-                    figura._shader.SetMatrix4("view", _view);
-                    figura._shader.SetMatrix4("projection", _projection);
-                }
-                else
-                {
-                    figura._shader.SetMatrix4("model", model);
-                    figura._shader.SetMatrix4("view", _view);
-                    figura._shader.SetMatrix4("projection", _projection);
-
-                }
-            }
-        }
-
-        public void Dibujar()
-        {
-            foreach (var figura in figuras)
-            {
-                figura.Dibujar();
-            }
-        }
+        
     }
 }

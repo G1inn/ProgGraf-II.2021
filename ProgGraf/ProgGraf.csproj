@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Model\Stages\Nivel.cs~RF3d265333.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.6.7" />
   </ItemGroup>
 
