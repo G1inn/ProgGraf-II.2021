@@ -12,6 +12,10 @@ namespace ProgGraf.Model
     {
         public Hashtable objetos = new Hashtable();
 
+        public Escenario()
+        {
+        }
+
         public void Dibujar()
         {
             foreach (DictionaryEntry item in objetos)
@@ -28,6 +32,11 @@ namespace ProgGraf.Model
                 Objeto obj = (Objeto)item.Value;
                 obj.SetMatrixes(model, _view, _projection);
             }
+        }
+
+        public void AddObject(String x, Objeto objeto)
+        {
+            objetos.Add(x, objeto);
         }
     }
 }

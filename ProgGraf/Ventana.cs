@@ -6,13 +6,15 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using ProgGraf.Common;
 using ProgGraf.Model;
 using ProgGraf.Model.Objects;
-using ProgGraf.Model.Stages;
+using System.Collections;
 
 namespace ProgGraf
 {
     public class Ventana : GameWindow
     {
-        public Escenario nivel;
+        public Escenario nivel = new Escenario();
+
+        private double tiempo;
 
         private Matrix4 _view;
         private Matrix4 _projection;
@@ -28,21 +30,34 @@ namespace ProgGraf
 
             GL.Enable(EnableCap.DepthTest);
 
-            nivel = new Nivel();
+            nivel.AddObject("obj1", new Casa(new Vector3(2.0f, 1.0f, -4.0f)));
+            nivel.AddObject("obj2", new Casa(new Vector3(0.0f, 0.0f, -8.0f)));
+            nivel.AddObject("obj3", new Casa(new Vector3(-2.0f, -1.0f, -6.0f)));
 
             _view = Matrix4.LookAt(new Vector3(0.0f, 0.0f, 3.0f),new Vector3(0.0f, 0.0f, 0.0f),new Vector3(0.0f, 1.0f, 0.0f));
             _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45f), Size.X / (float)Size.Y, 0.1f, 100.0f);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
-        {            
+        {
+            tiempo += 80.0 * e.Time;
+
             base.OnRenderFrame(e);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            var model = Matrix4.Identity;
-
-            nivel.SetObjectMatrixes(model, _view, _projection);
+            var model = Matrix4.Identity;  
+            //Esto  se lo hace para que roten sobre sí mismos
+            foreach (DictionaryEntry item in nivel.objetos)
+            {
+                Objeto obj = (Objeto)item.Value;
+                var model2 = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-obj.pos.X, -obj.pos.Y, -obj.pos.Z));
+                obj.SetMatrixes(model2, _view, _projection);
+                model2 = model2 * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(tiempo));
+                obj.SetMatrixes(model2, _view, _projection);
+                model2 = model2 * Matrix4.CreateTranslation(new Vector3(obj.pos.X, obj.pos.Y, obj.pos.Z));
+                obj.SetMatrixes(model2, _view, _projection);
+            }
             nivel.Dibujar();
 
 
