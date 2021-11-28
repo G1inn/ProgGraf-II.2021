@@ -33,5 +33,13 @@ namespace ProgGraf.Model
                 obj.Dibujar();
             }
         }
+        public void InitBuffers()
+        {
+            foreach (DictionaryEntry item in figuras)
+            {
+                Figura obj = (Figura)item.Value;
+                obj.InitBuffers();
+            }
+        }
     }
 }

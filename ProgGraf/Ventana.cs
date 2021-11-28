@@ -12,7 +12,7 @@ namespace ProgGraf
 {
     public class Ventana : GameWindow
     {
-        public Escenario nivel = new Escenario();
+        public Escenario nivel;
 
         private double tiempo;
 
@@ -30,9 +30,7 @@ namespace ProgGraf
 
             GL.Enable(EnableCap.DepthTest);
 
-            nivel.AddObject("obj1", new Casa(new Vector3(2.0f, 1.0f, -4.0f)));
-            nivel.AddObject("obj2", new Casa(new Vector3(0.0f, 0.0f, -8.0f)));
-            nivel.AddObject("obj3", new Casa(new Vector3(-2.0f, -1.0f, -6.0f)));
+            nivel.InitBufers();
 
             _view = Matrix4.LookAt(new Vector3(0.0f, 0.0f, 3.0f),new Vector3(0.0f, 0.0f, 0.0f),new Vector3(0.0f, 1.0f, 0.0f));
             _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45f), Size.X / (float)Size.Y, 0.1f, 100.0f);
@@ -50,14 +48,25 @@ namespace ProgGraf
             //Esto  se lo hace para que roten sobre sí mismos
             foreach (DictionaryEntry item in nivel.objetos)
             {
-                Objeto obj = (Objeto)item.Value;
-                var model2 = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-obj.pos.X, -obj.pos.Y, -obj.pos.Z));
-                obj.SetMatrixes(model2, _view, _projection);
-                model2 = model2 * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(tiempo));
-                obj.SetMatrixes(model2, _view, _projection);
-                model2 = model2 * Matrix4.CreateTranslation(new Vector3(obj.pos.X, obj.pos.Y, obj.pos.Z));
-                obj.SetMatrixes(model2, _view, _projection);
+                Objeto objeto = (Objeto)item.Value;
+                //var model2 = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-obj.pos.X, -obj.pos.Y, -obj.pos.Z));
+                objeto.SetMatrixes(model, _view, _projection);
+                //model2 = model2 * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(tiempo));
+                //obj.SetMatrixes(model2, _view, _projection);
+                //model2 = model2 * Matrix4.CreateTranslation(new Vector3(obj.pos.X, obj.pos.Y, obj.pos.Z));
+                //obj.SetMatrixes(model2, _view, _projection);
             }
+            Objeto obj = (Objeto) nivel.objetos["obj1"];
+            Figura f = (Figura)obj.figuras["techo"];
+            var model2 = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-obj.pos.X, -obj.pos.Y, -obj.pos.Z));
+            //obj.SetMatrixes(model2, _view, _projection);
+            f._shader.SetMatrix4("model", model2);
+            model2 = model2 * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(tiempo));
+            //obj.SetMatrixes(model2, _view, _projection);
+            f._shader.SetMatrix4("model", model2);
+            model2 = model2 * Matrix4.CreateTranslation(new Vector3(obj.pos.X, obj.pos.Y, obj.pos.Z));
+            //obj.SetMatrixes(model2, _view, _projection);
+            f._shader.SetMatrix4("model", model2);
             nivel.Dibujar();
 
 

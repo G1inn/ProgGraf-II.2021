@@ -3,6 +3,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using ProgGraf;
+using System;
 
 Console.WriteLine("Hello, World!");
 

@@ -38,5 +38,13 @@ namespace ProgGraf.Model
         {
             objetos.Add(x, objeto);
         }
+        public void InitBufers()
+        {
+            foreach (DictionaryEntry item in objetos)
+            {
+                Objeto obj = (Objeto)item.Value;
+                obj.InitBuffers();
+            }
+        }
     }
 }

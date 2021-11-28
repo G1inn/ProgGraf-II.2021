@@ -16,21 +16,21 @@ namespace ProgGraf.Model.Objects
 
         public Casa(Vector3 _pos)
         {
-            string paredesDataString = File.ReadAllText("../../../res/paredesData.txt");
+            string paredesDataString = File.ReadAllText("../../../../ProgGraf/res/paredesData.txt");
             Data jsonDataP = JsonSerializer.Deserialize<Data>(paredesDataString);
             float[] vertP = jsonDataP.ParserVertices(_pos);
             uint[] indP = jsonDataP.Indices;
 
-            string techoDataString = File.ReadAllText("../../../res/techoData.txt");
+            string techoDataString = File.ReadAllText("../../../../ProgGraf/res/techoData.txt");
             Data jsonDataT = JsonSerializer.Deserialize<Data>(techoDataString);
             float[] vertT =jsonDataT.ParserVertices(_pos);
             uint[] indT = jsonDataT.Indices;
 
             pos = _pos;
             paredes = new Figura(new Vector3(pos.X, pos.Y, pos.Z),
-                "../../../Shaders/shader.vert", "../../../Shaders/shader.frag", vertP, indP);
+                "../../../../ProgGraf/Shaders/shader.vert", "../../../../ProgGraf/Shaders/shader.frag", vertP, indP);
             techo = new Figura(new Vector3(pos.X, pos.Y, pos.Z),
-                "../../../Shaders/shader.vert", "../../../Shaders/shaderP.frag", vertT, indT);
+                "../../../../ProgGraf/Shaders/shader.vert", "../../../../ProgGraf/Shaders/shaderP.frag", vertT, indT);
             figuras.Add("paredes", paredes);
             figuras.Add("techo", techo);
         }

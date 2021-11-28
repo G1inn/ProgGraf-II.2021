@@ -15,6 +15,9 @@ namespace ProgGraf.Model
         public uint[] _indices;
         public int cantidadDeVertices;
         public int cantidadDeIndices;
+
+        public string verticeRuta;
+        public string fragmentoRuta;
         public void SetShader(string _vertRuta, string _fragRuta)
         {
             _shader = new Shader(_vertRuta, _fragRuta);
@@ -48,12 +51,17 @@ namespace ProgGraf.Model
             cantidadDeVertices = _vertices.Length / 3;
             cantidadDeIndices = _indices.Length;
 
+            verticeRuta = vertRuta;
+            fragmentoRuta = fragRuta;
+        }
+        public void InitBuffers()
+        {
             _vbo = new VBO(_vertices, _vertices.Length);
             _vao = new VAO();
             _vao.añadirBuffer(_shader);
             _ebo = new EBO(_indices, _indices.Length);
 
-            SetShader(vertRuta, fragRuta);
+            SetShader(verticeRuta, fragmentoRuta);
         }
     }
 }
