@@ -15,6 +15,7 @@ namespace ProgGraf.Model
         public uint[] _indices;
         public int cantidadDeVertices;
         public int cantidadDeIndices;
+        public Vector3 _centro;
 
         public string verticeRuta;
         public string fragmentoRuta;
@@ -45,7 +46,15 @@ namespace ProgGraf.Model
 
         public Figura(Vector3 centro, string vertRuta, string fragRuta, float[] vertices, uint[] indices)
         {
-            _vertices = vertices;
+            _centro = centro;
+            float[] vert = new float[vertices.Length];
+            for (int i = 0; i <= vertices.Length - 3; i = i + 3)
+            {
+                vert[i] = vertices[i] + centro.X;
+                vert[i + 1] = vertices[i + 1] + centro.Y;
+                vert[i + 2] = vertices[i + 2] + centro.Z;
+            }
+            _vertices = vert;
             _indices = indices;
 
             cantidadDeVertices = _vertices.Length / 3;

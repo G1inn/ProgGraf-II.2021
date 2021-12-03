@@ -13,6 +13,8 @@ namespace ProgGraf.Model.Objects
     {
         public Figura paredes;
         public Figura techo;
+        public Vector3 posPared;
+        public Vector3 posTecho;
 
         public Casa(Vector3 _pos)
         {
@@ -27,9 +29,12 @@ namespace ProgGraf.Model.Objects
             uint[] indT = jsonDataT.Indices;
 
             pos = _pos;
-            paredes = new Figura(new Vector3(pos.X, pos.Y, pos.Z),
+
+            posPared = new Vector3(0, 0, 0);
+            paredes = new Figura(posPared,
                 "../../../../ProgGraf/Shaders/shader.vert", "../../../../ProgGraf/Shaders/shader.frag", vertP, indP);
-            techo = new Figura(new Vector3(pos.X, pos.Y, pos.Z),
+            posTecho = new Vector3(0, 0.7f, 0);
+            techo = new Figura(posTecho,
                 "../../../../ProgGraf/Shaders/shader.vert", "../../../../ProgGraf/Shaders/shaderP.frag", vertT, indT);
             figuras.Add("paredes", paredes);
             figuras.Add("techo", techo);

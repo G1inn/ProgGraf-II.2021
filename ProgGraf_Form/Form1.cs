@@ -29,7 +29,7 @@ namespace ProgGraf_Form
             using (ventana = new Ventana(GameWindowSettings.Default, nativeWindowSettings))
             {
 
-                ventana.nivel = nivel;
+                ventana.nivel = nivel; ventana.sel = ""; ventana.parteSel = "";
                 ventana.Run();
             }
         }
@@ -49,6 +49,79 @@ namespace ProgGraf_Form
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trackBar1.Value = 0; ventana.a = 0;
+            trackBar2.Value = 0; ventana.b = 0;
+            trackBar3.Value = 0; ventana.c = 0;
+            ventana.sel = (string)comboBox1.SelectedItem;
+            ventana.parteSel = "";
+
+            comboBox2.Items.Clear();
+
+            Objeto o = (Objeto)nivel.objetos[ventana.sel];
+            foreach (DictionaryEntry item in o.figuras)
+            {
+                comboBox2.Items.Add(item.Key);
+            }
+        }
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trackBar1.Value = 0; ventana.a = 0;
+            trackBar2.Value = 0; ventana.b = 0;
+            trackBar3.Value = 0; ventana.c = 0;
+            ventana.parteSel = (string)comboBox2.SelectedItem;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            ventana.a = (float) trackBar1.Value / 10;
+        }
+
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            ventana.c = (float)trackBar3.Value / 10;
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            ventana.b = (float)trackBar2.Value / 10;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBar1.Value = 0; ventana.a = 0;
+            trackBar2.Value = 0; ventana.b = 0;
+            trackBar3.Value = 0; ventana.c = 0;
+            ventana.transSel = "traslacion";
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBar1.Value = 0; ventana.a = 0;
+            trackBar2.Value = 0; ventana.b = 0;
+            trackBar3.Value = 0; ventana.c = 0;
+            ventana.transSel = "rotacion";
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBar1.Value = 0; ventana.a = 0;
+            trackBar2.Value = 0; ventana.b = 0;
+            trackBar3.Value = 0; ventana.c = 0;
+            ventana.transSel = "escalacion";
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
         {
 
         }

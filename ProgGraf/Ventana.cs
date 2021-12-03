@@ -12,12 +12,12 @@ namespace ProgGraf
 {
     public class Ventana : GameWindow
     {
-        public Escenario nivel;
+        public Escenario nivel; public float a, b, c; public string sel, parteSel, transSel;
 
         private double tiempo;
 
-        private Matrix4 _view;
-        private Matrix4 _projection;
+        public Matrix4 _view;
+        public Matrix4 _projection;
         public Ventana(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
         {
@@ -45,30 +45,92 @@ namespace ProgGraf
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             var model = Matrix4.Identity;  
-            //Esto  se lo hace para que roten sobre sí mismos
             foreach (DictionaryEntry item in nivel.objetos)
             {
                 Objeto objeto = (Objeto)item.Value;
-                //var model2 = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-obj.pos.X, -obj.pos.Y, -obj.pos.Z));
                 objeto.SetMatrixes(model, _view, _projection);
-                //model2 = model2 * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(tiempo));
-                //obj.SetMatrixes(model2, _view, _projection);
-                //model2 = model2 * Matrix4.CreateTranslation(new Vector3(obj.pos.X, obj.pos.Y, obj.pos.Z));
-                //obj.SetMatrixes(model2, _view, _projection);
             }
-            Objeto obj = (Objeto) nivel.objetos["obj1"];
-            Figura f = (Figura)obj.figuras["techo"];
-            var model2 = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-obj.pos.X, -obj.pos.Y, -obj.pos.Z));
-            //obj.SetMatrixes(model2, _view, _projection);
-            f._shader.SetMatrix4("model", model2);
-            model2 = model2 * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(tiempo));
-            //obj.SetMatrixes(model2, _view, _projection);
-            f._shader.SetMatrix4("model", model2);
-            model2 = model2 * Matrix4.CreateTranslation(new Vector3(obj.pos.X, obj.pos.Y, obj.pos.Z));
-            //obj.SetMatrixes(model2, _view, _projection);
-            f._shader.SetMatrix4("model", model2);
-            nivel.Dibujar();
 
+            Objeto o = (Objeto)nivel.objetos[sel];
+            if (parteSel == "")
+            {
+                switch (transSel)
+                {
+                    case "traslacion":
+                        var modelA = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-o.pos.X, -o.pos.Y, -o.pos.Z));
+                        o.SetMatrixes(modelA, _view, _projection);
+                        modelA = modelA * Matrix4.CreateTranslation(a, b, c);
+                        o.SetMatrixes(modelA, _view, _projection);
+                        modelA = modelA * Matrix4.CreateTranslation(new Vector3(o.pos.X, o.pos.Y, o.pos.Z));
+                        o.SetMatrixes(modelA, _view, _projection);
+                        break;
+                    case "rotacion":
+                        var modelB = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-o.pos.X, -o.pos.Y, -o.pos.Z));
+                        o.SetMatrixes(modelB, _view, _projection);
+                        modelB = modelB * Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(a * 50));
+                        modelB = modelB * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(b * 50));
+                        modelB = modelB * Matrix4.CreateRotationZ((float)MathHelper.DegreesToRadians(c * 50));
+                        o.SetMatrixes(modelB, _view, _projection);
+                        modelB = modelB * Matrix4.CreateTranslation(new Vector3(o.pos.X, o.pos.Y, o.pos.Z));
+                        o.SetMatrixes(modelB, _view, _projection);
+                        break;
+                    case "escalacion":
+                        var modelC = model * Matrix4.CreateTranslation(new Vector3(-o.pos.X, -o.pos.Y, -o.pos.Z));
+                        o.SetMatrixes(modelC, _view, _projection);
+                        modelC = modelC * Matrix4.CreateScale(1 + a, 1 + b, 1 + c);
+                        o.SetMatrixes(modelC, _view, _projection);
+                        modelC = modelC * Matrix4.CreateTranslation(new Vector3(o.pos.X, o.pos.Y, o.pos.Z));
+                        o.SetMatrixes(modelC, _view, _projection);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                Figura f = (Figura)o.figuras[parteSel];
+                switch (transSel)
+                {
+                    case "traslacion":
+                        var modelA = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-o.pos.X, -o.pos.Y, -o.pos.Z));
+                        f._shader.SetMatrix4("model", modelA);
+                        modelA = modelA * Matrix4.CreateTranslation(a, b, c);
+                        f._shader.SetMatrix4("model", modelA);
+                        modelA = modelA * Matrix4.CreateTranslation(new Vector3(o.pos.X, o.pos.Y, o.pos.Z));
+                        f._shader.SetMatrix4("model", modelA);
+                        break;
+                    case "rotacion":
+                        var modelB = Matrix4.Identity * Matrix4.CreateTranslation(new Vector3(-o.pos.X, -o.pos.Y, -o.pos.Z));
+                        f._shader.SetMatrix4("model", modelB);
+                        modelB = modelB * Matrix4.CreateTranslation(new Vector3(-f._centro.X, -f._centro.Y, -f._centro.Z));
+                        f._shader.SetMatrix4("model", modelB);
+                        modelB = modelB * Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(a * 50));
+                        modelB = modelB * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(b * 50));
+                        modelB = modelB * Matrix4.CreateRotationZ((float)MathHelper.DegreesToRadians(c * 50));
+                        f._shader.SetMatrix4("model", modelB);
+                        modelB = modelB * Matrix4.CreateTranslation(new Vector3(f._centro.X, f._centro.Y, f._centro.Z));
+                        f._shader.SetMatrix4("model", modelB);
+                        modelB = modelB * Matrix4.CreateTranslation(new Vector3(o.pos.X, o.pos.Y, o.pos.Z));
+                        f._shader.SetMatrix4("model", modelB);
+                        break;
+                    case "escalacion":
+                        var modelC = model * Matrix4.CreateTranslation(new Vector3(-o.pos.X, -o.pos.Y, -o.pos.Z));
+                        f._shader.SetMatrix4("model", modelC);
+                        modelC = modelC * Matrix4.CreateTranslation(new Vector3(-f._centro.X, -f._centro.Y, -f._centro.Z));
+                        f._shader.SetMatrix4("model", modelC);
+                        modelC = modelC * Matrix4.CreateScale(1 + a, 1 + b, 1 + c);
+                        f._shader.SetMatrix4("model", modelC);
+                        modelC = modelC * Matrix4.CreateTranslation(new Vector3(f._centro.X, f._centro.Y, f._centro.Z));
+                        f._shader.SetMatrix4("model", modelC);
+                        modelC = modelC * Matrix4.CreateTranslation(new Vector3(o.pos.X, o.pos.Y, o.pos.Z));
+                        f._shader.SetMatrix4("model", modelC);
+                        break;
+                    default:
+                        break;
+                }
+            }           
+
+            nivel.Dibujar();
 
             SwapBuffers();
         }
