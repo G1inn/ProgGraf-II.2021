@@ -46,5 +46,10 @@ namespace ProgGraf.Model
                 obj.InitBuffers();
             }
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }

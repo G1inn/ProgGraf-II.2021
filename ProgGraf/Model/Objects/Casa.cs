@@ -17,7 +17,7 @@ namespace ProgGraf.Model.Objects
         public Vector3 posTecho;
 
         public Casa(Vector3 _pos)
-        {
+        {   
             string paredesDataString = File.ReadAllText("../../../../ProgGraf/res/paredesData.txt");
             Data jsonDataP = JsonSerializer.Deserialize<Data>(paredesDataString);
             float[] vertP = jsonDataP.ParserVertices(_pos);
